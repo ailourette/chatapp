@@ -89,25 +89,25 @@ func main() {
 		case 1:
 			msgName, msgContent := getMsg()
 			sendMsg(msgName, msgContent)
-		case 2:
+		//case 2:
 
-		case 3:
+		//case 3:
 
-		case 4:
+		//case 4:
 
-		case 5:
+		//case 5:
 
-		case 6:
+		//case 6:
 
-		case 7:
+		//case 7:
 
-		case 8:
+		//case 8:
 
-		case 9:
+		//case 9:
 
-		case 10:
+		//case 10:
 
-		case 11:
+		//case 11:
 
 		default:
 			fmt.Println("Invalid Input")
