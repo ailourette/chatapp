@@ -13,9 +13,7 @@ import (
 )
 
 var (
-	mainInput      int
-	messageName    string
-	messageContent string
+	mainInput int
 )
 
 type Message struct {
@@ -24,7 +22,13 @@ type Message struct {
 	Timestamp string
 }
 
-func getMsg() (msgName, msgContent string) {
+func getMsg() (string, string) {
+	var (
+		msgName        string
+		msgContent     string
+		messageName    string
+		messageContent string
+	)
 	fmt.Println("Please enter message name:")
 	fmt.Scanf("%s\n", &messageName)
 	fmt.Println("Please enter message content:")
@@ -37,7 +41,7 @@ func getMsg() (msgName, msgContent string) {
 	if msgName == "" || msgContent == "" {
 		log.Println("Message Name and Content cannot be empty")
 	} else {
-		return msgName, msgContent
+		return messageName, messageContent
 	}
 	return "", ""
 }
@@ -293,4 +297,25 @@ func main() {
 		log.Println(err)
 	}
 }
+*/
+
+/*
+func (r *RoomMap) CreateRoom() string {
+	r.Mutex.Lock()
+	defer r.Mutex.Unlock()
+
+	rand.Seed(time.Now().UnixNano())
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+	b := make([]rune, 8)
+
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+
+	roomID := string(b)
+	r.Map[roomID] = []Participant{}
+
+	return roomID
+}
+Instead of formulating your own way to generate unique id, use uuid instead, it's easier and more proven to be unique across the industry
 */

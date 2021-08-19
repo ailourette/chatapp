@@ -66,6 +66,59 @@ func (h *messageHandler) HandleMessage(m *nsq.Message) error {
 	log.Println("Timestamp : ", request.Timestamp)
 	log.Println("--------------------")
 	log.Println("")
+
+	//sendMsg(request.Name, request.Content)
+
 	// Will automatically set the message as finish
 	return nil
 }
+
+/*
+func sendMsg(msgName, msgContent string) {
+	//The only valid way to instantiate the Config
+	config := nsq.NewConfig()
+	//Creating the Producer using NSQD Address
+	producer, err := nsq.NewProducer("127.0.0.1:4151", config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Init topic name and message
+	topic := "Topic_Example"
+	msg := Message{
+		Name:      msgName,
+		Content:   msgContent,
+		Timestamp: time.Now().String(),
+	}
+	//Convert message as []byte
+	payload, err := json.Marshal(msg)
+	if err != nil {
+		log.Println(err)
+	}
+	//Publish the Message
+	err = producer.Publish(topic, payload)
+	if err != nil {
+		log.Println(err)
+	}
+}
+*/
+
+/*
+func (r *RoomMap) CreateRoom() string {
+	r.Mutex.Lock()
+	defer r.Mutex.Unlock()
+
+	rand.Seed(time.Now().UnixNano())
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+	b := make([]rune, 8)
+
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+
+	roomID := string(b)
+	r.Map[roomID] = []Participant{}
+
+	return roomID
+}
+Instead of formulating your own way to generate unique id, use uuid instead, it's easier and more proven to be unique across the industry
+*/
