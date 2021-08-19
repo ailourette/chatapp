@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bregydoc/gtranslate"
 	"github.com/nsqio/go-nsq"
 )
 
@@ -67,12 +68,52 @@ func sendMsg(msgName, msgContent string) {
 	}
 }
 
+func sendjapMsg(msgName, msgContent string) {
+	//The only valid way to instantiate the Config
+	config := nsq.NewConfig()
+	//Creating the Producer using NSQD Address
+	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Init topic name and message
+	topic := "Topic_Example"
+	msg := Message{
+		Name:      msgName,
+		Content:   msgContent,
+		Timestamp: time.Now().String(),
+	}
+	//Convert message as []byte
+	payload, err := json.Marshal(msg)
+	if err != nil {
+		log.Println(err)
+	}
+	//Publish the Message
+	err = producer.Publish(topic, payload)
+	if err != nil {
+		log.Println(err)
+	}
+	//Translate English To Japanese
+	translated, err := gtranslate.TranslateWithParams(
+		msgContent,
+		gtranslate.TranslationParams{
+			From: "en",
+			To:   "ja",
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("en: %s | ja: %s \n", msgContent, translated)
+}
+
 func main() {
 	for {
 		fmt.Println("Chat Application")
 		fmt.Println(strings.Repeat("=", 16))
 		fmt.Println("1. Send Message")
-		// fmt.Println("2. Generate Shopping List Report")
+		fmt.Println("2. Translate English To Japanese")
 		// fmt.Println("3. Add Items.")
 		// fmt.Println("4. Modify Items.")
 		// fmt.Println("5. Delete Item.")
@@ -89,8 +130,9 @@ func main() {
 		case 1:
 			msgName, msgContent := getMsg()
 			sendMsg(msgName, msgContent)
-		//case 2:
-
+		case 2:
+			msgName, msgContent := getMsg()
+			sendjapMsg(msgName, msgContent)
 		//case 3:
 
 		//case 4:
