@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <titleUser Sign Up</title>
+</head>
+<body>
+<h1>Patient Signup:</h1>
+<h1>Please enter the following information</h1>
+<form method="post">
+    <input type= "text" name="username" placeholder="username (Email)">
+    <input type= "text" name="password" placeholder="Password">
+    <input type= "text" name="firstname" placeholder="First Name">
+    <input type= "text" name="lastname" placeholder="Last Name">
+    <input type= "text" name="language" placeholder="Language">
+    <input type= "submit">
+</form>
+{{if .UserName}}
+{{else}}
+{{end}}
+<h2>Go to <a href="/">Main Menu</a></h2>
+</body>
+</html>
