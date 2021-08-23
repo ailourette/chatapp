@@ -6,11 +6,11 @@ Steps to run program
     c.) Create and Start the docker using the command
         docker-compose up -d
         
-2.) Open consumer.go in another visual studio code window. Run the nsqServer.go 
+2.) Open consumer.go in another visual studio code window.
     go run consumer.go
 
-3.) Open producer.go in a visual studio code window. Run the nsqClient.go
-    cd producer
+3.) Open producer.go in a visual studio code window.
+    open producer folder in visual studio code
     go run producer.go
 
 4.) NSQ admin
