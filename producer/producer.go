@@ -46,14 +46,22 @@ func getMsg() (string, string) {
 	return "", ""
 }
 
-func sendMsg(msgName, msgContent string) {
-	//The only valid way to instantiate the Config
-	config := nsq.NewConfig()
-	//Creating the Producer using NSQD Address
-	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
-	if err != nil {
-		log.Fatal(err)
+//go:generate mockgen -source=producer.go -destination=./mock/mock.go -package=mock
+type publisher interface {
+	Publish(topic string, body []byte) error
+}
+
+type Handler struct {
+	producer publisher
+}
+
+func New(producer publisher) *Handler {
+	return &Handler{
+		producer: producer,
 	}
+}
+
+func (h *Handler) SendMsg(msgName, msgContent string) {
 	//Init topic name and message
 	topic := "Topic_Example"
 	msg := Message{
@@ -67,7 +75,7 @@ func sendMsg(msgName, msgContent string) {
 		log.Println(err)
 	}
 	//Publish the Message
-	err = producer.Publish(topic, payload)
+	err = h.producer.Publish(topic, payload)
 	if err != nil {
 		log.Println(err)
 	}
@@ -219,55 +227,65 @@ func sendgermanMsg(msgName, msgContent string) {
 }
 
 func main() {
-	for {
-		fmt.Println("Chat Application")
-		fmt.Println(strings.Repeat("=", 16))
-		fmt.Println("1. Send Message")
-		fmt.Println("2. Translate English To Japanese")
-		fmt.Println("3. Translate English To Spanish")
-		fmt.Println("4. Translate English To Simplified Chinese")
-		fmt.Println("5. Translate English To German")
-		// fmt.Println("6. Print Current Data.")
-		// fmt.Println("7. Add New Category Name")
-		// fmt.Println("8. Modify Category")
-		// fmt.Println("9. Delete Category")
-		// fmt.Println("10. Save Shopping List")
-		// fmt.Println("11. Previous Shopping List")
-		fmt.Println("Select your choice:")
-		fmt.Scanf("%d\n", &mainInput)
-
-		switch mainInput {
-		case 1:
-			msgName, msgContent := getMsg()
-			sendMsg(msgName, msgContent)
-		case 2:
-			msgName, msgContent := getMsg()
-			sendjapMsg(msgName, msgContent)
-		case 3:
-			msgName, msgContent := getMsg()
-			sendspainMsg(msgName, msgContent)
-		case 4:
-			msgName, msgContent := getMsg()
-			sendsimplifiedchineseMsg(msgName, msgContent)
-		case 5:
-			msgName, msgContent := getMsg()
-			sendgermanMsg(msgName, msgContent)
-		//case 6:
-
-		//case 7:
-
-		//case 8:
-
-		//case 9:
-
-		//case 10:
-
-		//case 11:
-
-		default:
-			fmt.Println("Invalid Input")
-		}
+	//The only valid way to instantiate the Config
+	config := nsq.NewConfig()
+	//Creating the Producer using NSQD Address
+	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	h := New(producer)
+	h.SendMsg("name example", "content example")
+	// for {
+	// 	fmt.Println("Chat Application")
+	// 	fmt.Println(strings.Repeat("=", 16))
+	// 	fmt.Println("1. Send Message")
+	// 	fmt.Println("2. Translate English To Japanese")
+	// 	fmt.Println("3. Translate English To Spanish")
+	// 	fmt.Println("4. Translate English To Simplified Chinese")
+	// 	fmt.Println("5. Translate English To German")
+	// 	// fmt.Println("6. Print Current Data.")
+	// 	// fmt.Println("7. Add New Category Name")
+	// 	// fmt.Println("8. Modify Category")
+	// 	// fmt.Println("9. Delete Category")
+	// 	// fmt.Println("10. Save Shopping List")
+	// 	// fmt.Println("11. Previous Shopping List")
+	// 	fmt.Println("Select your choice:")
+	// 	fmt.Scanf("%d\n", &mainInput)
+
+	// 	switch mainInput {
+	// 	case 1:
+	// 		//msgName, msgContent := getMsg()
+	// 		//sendMsg(msgName, msgContent)
+	// 	case 2:
+	// 		msgName, msgContent := getMsg()
+	// 		sendjapMsg(msgName, msgContent)
+	// 	case 3:
+	// 		msgName, msgContent := getMsg()
+	// 		sendspainMsg(msgName, msgContent)
+	// 	case 4:
+	// 		msgName, msgContent := getMsg()
+	// 		sendsimplifiedchineseMsg(msgName, msgContent)
+	// 	case 5:
+	// 		msgName, msgContent := getMsg()
+	// 		sendgermanMsg(msgName, msgContent)
+	// 	//case 6:
+
+	// 	//case 7:
+
+	// 	//case 8:
+
+	// 	//case 9:
+
+	// 	//case 10:
+
+	// 	//case 11:
+
+	// 	default:
+	// 		fmt.Println("Invalid Input")
+	// 	}
+	// }
 }
 
 /*
