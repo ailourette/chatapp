@@ -1,0 +1,10 @@
+user account registration shouldn’t be using the pubsub, simple http server is enough, pubsub is for modules that are asynchronous (notification, chat, etc)
+
+7:43
+so you’d have 2 services: message queue consumer and http server
+7:45
+http server would have multiple endpoints e.g.
+/account/create
+/chat/send
+whereas /chat/send would need to process asynchronously so inside the handler it would contain the producer
+and /account/create would not need to process message asynchronously, so it would not contain the producer

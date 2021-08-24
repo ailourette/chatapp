@@ -18,6 +18,7 @@ type Message struct {
 	Timestamp string
 }
 
+// need to link producer with this side of the program. Below here includes, user account functions and send message registration
 func main() {
 	//The only valid way to instantiate the Config
 	config := nsq.NewConfig()
