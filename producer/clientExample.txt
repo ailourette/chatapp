@@ -1,0 +1,134 @@
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+)
+
+const baseURL = "http://localhost:5000/api/v1/courses"
+const key = "2c78afaf-97da-4816-bbee-9ad239abb296"
+
+func getCourse(code string) {
+	url := baseURL
+	if code != "" {
+		url = baseURL + "/" + code + "?key=" + key
+	}
+	response, err := http.Get(url)
+
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(response.StatusCode)
+		fmt.Println(string(data))
+		response.Body.Close()
+	}
+}
+
+func addCourse(code string, jsonData map[string]string) {
+	jsonValue, _ := json.Marshal(jsonData)
+	response, err := http.Post(baseURL+"/"+code+"?key="+key,
+		"application/json", bytes.NewBuffer(jsonValue))
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(response.StatusCode)
+		fmt.Println(string(data))
+		response.Body.Close()
+	}
+}
+
+func updateCourse(code string, jsonData map[string]string) {
+	jsonValue, _ := json.Marshal(jsonData)
+
+	request, err := http.NewRequest(http.MethodPut,
+		baseURL+"/"+code+"?key="+key,
+		bytes.NewBuffer(jsonValue))
+
+	request.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(response.StatusCode)
+		fmt.Println(string(data))
+		response.Body.Close()
+	}
+}
+
+func deleteCourse(code string) {
+	request, err := http.NewRequest(http.MethodDelete,
+		baseURL+"/"+code+"?key="+key, nil)
+	client := &http.Client{}
+	response, err := client.Do(request)
+
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(response.StatusCode)
+		fmt.Println(string(data))
+		response.Body.Close()
+	}
+}
+
+func main() {
+	//getCourse("") // get all courses
+	//getCourse("IOS101") // get a specific course
+
+	// jsonData := map[string]string{"title": "Applied Go Programming"}
+	// addCourse("IOT210", jsonData)
+
+	//jsonData := map[string]string{"title": "Go Concurrency Programming"}
+	//updateCourse("IOT210", jsonData)
+
+	// deleteCourse("IOT210")
+	// getCourse("")
+	var mainInput int
+	var code string
+
+	for {
+		fmt.Println("Courses Application")
+		fmt.Println(strings.Repeat("=", 25))
+		fmt.Println("1. Get all courses")
+		fmt.Println("2. Get specific course info")
+		fmt.Println("3. Add new course")
+		fmt.Println("4. Update course")
+		fmt.Println("5. Delete course")
+		fmt.Println("6. Exit")
+		fmt.Println("Select your choice:")
+		fmt.Scanf("%d\n", &mainInput)
+
+		switch mainInput {
+		case 1:
+			getCourse("") // get all courses
+		case 2:
+			fmt.Println("Please enter course code:")
+			fmt.Scanf("%s\n", &code)
+			getCourse(code)
+		case 3:
+			jsonData := map[string]string{"title": "Applied Go Programming"}
+			addCourse("IOT210", jsonData)
+		case 4:
+			jsonData := map[string]string{"title": "Go Concurrency Programming"}
+			updateCourse("IOT210", jsonData)
+		case 5:
+			fmt.Println("Please enter course code:")
+			fmt.Scanf("%s\n", &code)
+			deleteCourse(code)
+		case 6:
+
+		default:
+			fmt.Println("Invalid Input")
+		}
+	}
+}
