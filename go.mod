@@ -7,6 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/mock v1.6.0
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/nsqio/go-nsq v1.0.8
 	github.com/robertkrimen/otto v0.0.0-20210614181706-373ff5438452 // indirect
 	github.com/satori/go.uuid v1.2.0

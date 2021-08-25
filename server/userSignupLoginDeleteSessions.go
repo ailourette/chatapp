@@ -3,19 +3,17 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"html/template"
 	"io"
 	"net/http"
 	"strings"
-	"sync"
 
 	"github.com/go-playground/validator/v10"
 	uuid "github.com/satori/go.uuid"
 )
 
 var (
-	mutex         sync.Mutex // Concurrency
-	tpl           *template.Template
+	//mutex         sync.Mutex // Concurrency
+	//tpl           *template.Template
 	userFirstName string
 )
 
@@ -76,7 +74,7 @@ func userSignup(res http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			io.WriteString(res, `
 			<html>
-			<meta http-equiv='refresh' content='5; url=/userSignup '/>
+			<meta http-equiv='refresh' content='5; url=/usersignup '/>
 			Please fill in all fields!<br>
 			You will be redirected shortly in 5 seconds...<br>
 			</html>
@@ -99,11 +97,11 @@ func userSignup(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 		userSignupDataBase(un, pw, firstName, lastName)
-		sessionWriteCsv()
+		//sessionWriteCsv()
 		mutex.Unlock()
 		io.WriteString(res, `
  			<html>
- 			<meta http-equiv='refresh' content='5; url=/userLogin '/>
+ 			<meta http-equiv='refresh' content='5; url=/userlogin '/>
 			 You have successfully signed up! <br>
 			 You will be redirected shortly in 5 seconds...<br>
  			</html>
@@ -172,7 +170,7 @@ func userLogin(res http.ResponseWriter, req *http.Request) {
 		}
 		http.SetCookie(res, c)
 		dbSessions[c.Value] = un
-		http.Redirect(res, req, "/userLoginSuccess", http.StatusSeeOther) // Redirect to user feature page
+		http.Redirect(res, req, "/userloginsuccess", http.StatusSeeOther) // Redirect to user feature page
 		return
 	}
 	tpl.ExecuteTemplate(res, "userLogin.gohtml", nil)
@@ -252,10 +250,10 @@ func userChangePassword(res http.ResponseWriter, req *http.Request) {
 			return
 		} else {
 			userChangePasswordDataBase(un, pw)
-			sessionWriteCsv()
+			//sessionWriteCsv()
 			io.WriteString(res, `
  			<html>
-			 <meta http-equiv='refresh' content='5; url=/userLogin '/>
+			 <meta http-equiv='refresh' content='5; url=/userlogin '/>
 			 Your password is updated successfully! <br>
 			 You will be redirected shortly in 5 seconds...<br>
  			</html>
