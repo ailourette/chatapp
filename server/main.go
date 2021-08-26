@@ -49,7 +49,7 @@ func userLoginSuccess(res http.ResponseWriter, req *http.Request) {
 
 func main() {
 	http.HandleFunc("/", home)
-	//http.HandleFunc("/logout", logout)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/usersignup", userSignup)
 	http.HandleFunc("/userlogin", userLogin)
 	http.HandleFunc("/userloginsuccess", userLoginSuccess)

@@ -152,7 +152,7 @@ func userLogin(res http.ResponseWriter, req *http.Request) {
 		}
 
 		// Save user information in global variable for use in making/edit or cancel appointment
-		db, err := sql.Open("mysql", "user1:password@tcp(127.0.0.1:3306)/MYSTOREDB")
+		db, err := sql.Open("mysql", "user1:password@tcp(127.0.0.1:3306)/mysql")
 		if err != nil {
 			panic(err.Error())
 		} else {
