@@ -8,17 +8,11 @@ import (
 
 // Declaration of global variable
 var (
-	patientName string
-	selectDoc   int = -1
-	selectTime  int = -1
-	errDoc      error
-	errTime     error
 	//tablePatient     [4][8]string
 	//doctors          = [4]string{"Amy", "Collin", "Jenkins", "Sarah"}
 	//doctorTime       = [8]string{"9am to 10am", "10am to 11am", "11am to 12pm", "1pm to 2pm", "2pm to 3pm", "3pm to 4pm", "4pm to 5pm", "5pm to 6pm"}
-	tpl              *template.Template
-	patientFirstName string
-	mutex            sync.Mutex // Concurrency
+	tpl   *template.Template
+	mutex sync.Mutex // Concurrency
 )
 
 func init() {
@@ -65,6 +59,6 @@ func main() {
 	//http.HandleFunc("/deleteusers", deleteUsers)
 	//http.HandleFunc("/docWriteNotes", docWriteNotes)
 	//http.HandleFunc("/docReadNotes", docReadNotes)
-	http.HandleFunc("/patientchangepassword", userChangePassword)
+	http.HandleFunc("/userchangepassword", userChangePassword)
 	http.ListenAndServeTLS(":5221", "cert.pem", "key.pem", nil)
 }
