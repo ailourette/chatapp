@@ -36,7 +36,7 @@ func home(res http.ResponseWriter, req *http.Request) {
 }
 
 func userLoginSuccess(res http.ResponseWriter, req *http.Request) {
-	tpl.ExecuteTemplate(res, "patientLoginSuccess.gohtml", nil)
+	tpl.ExecuteTemplate(res, "userLoginSuccess.gohtml", nil)
 }
 
 // func adminLoginSuccess(res http.ResponseWriter, req *http.Request) {
