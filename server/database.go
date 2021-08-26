@@ -13,11 +13,12 @@ type User struct {
 	Password  string
 	FirstName string
 	LastName  string
+	Language  string
 }
 
 // Insert new user account information into database
-func insertRecord(db *sql.DB, userName, passWord, firstName, lastName string) {
-	_, err := db.Exec("INSERT INTO MYSTOREDB.Users VALUES (?,?,?,?)", userName, passWord, firstName, lastName)
+func insertRecord(db *sql.DB, userName, passWord, firstName, lastName, language string) {
+	_, err := db.Exec("INSERT INTO MYSTOREDB.Users VALUES (?,?,?,?)", userName, passWord, firstName, lastName, language)
 	if err != nil {
 		Error.Println("Error inserting record into database")
 		fmt.Println(err)
@@ -47,11 +48,11 @@ func changePasswordRecord(db *sql.DB, userName string, password []byte) {
 	} else {
 		for results.Next() {
 			var person User
-			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName)
+			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName, &person.Language)
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				_, err := db.Exec("UPDATE MYSTOREDB.Users set password = ?, firstname = ?, lastname = ? where Username=?", password, &person.FirstName, &person.LastName, &person.UserName)
+				_, err := db.Exec("UPDATE MYSTOREDB.Users set password = ?, firstname = ?, lastname = ?, language = ? where Username=?", password, &person.FirstName, &person.LastName, &person.Language, &person.UserName)
 				if err != nil {
 					panic(err)
 				}
@@ -69,7 +70,7 @@ func getPasswordOfUser(db *sql.DB, userName string) string {
 	} else {
 		for results.Next() {
 			var person User
-			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName)
+			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName, &person.Language)
 			if err != nil {
 				fmt.Println(err)
 				return ""
@@ -90,7 +91,7 @@ func getFirstNameOfUser(db *sql.DB, userName string) string {
 	} else {
 		for results.Next() {
 			var person User
-			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName)
+			err = results.Scan(&person.UserName, &person.Password, &person.FirstName, &person.LastName, &person.Language)
 			if err != nil {
 				fmt.Println(err)
 				return ""
@@ -119,7 +120,7 @@ func verifyPassword(hashedPassword []byte, password string) bool {
 }
 
 // Open data base to insert new user account information
-func userSignupDataBase(un, pw, fn, ln string) {
+func userSignupDataBase(un, pw, fn, ln, language string) {
 	db, err := sql.Open("mysql", "user1:password@tcp(127.0.0.1:3306)/MYSTOREDB")
 	if err != nil {
 		panic(err.Error())
@@ -133,7 +134,7 @@ func userSignupDataBase(un, pw, fn, ln string) {
 	password := pw
 	firstName := fn
 	lastName := ln
-	insertRecord(db, userName, string(hashPassword(password)), firstName, lastName)
+	insertRecord(db, userName, string(hashPassword(password)), firstName, lastName, language)
 }
 
 // Open data base to remove user account information

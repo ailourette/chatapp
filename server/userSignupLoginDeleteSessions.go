@@ -96,7 +96,7 @@ func userSignup(res http.ResponseWriter, req *http.Request) {
 		`)
 			return
 		}
-		userSignupDataBase(un, pw, firstName, lastName)
+		userSignupDataBase(un, pw, firstName, lastName, language)
 		//sessionWriteCsv()
 		mutex.Unlock()
 		io.WriteString(res, `
